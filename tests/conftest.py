@@ -1,7 +1,14 @@
-from webdriver_manager.chrome import ChromeDriverManager
+import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
-service = ChromeService(executable_path=ChromeDriverManager().install())
+service = Service(executable_path="/Users/herm/Downloads/chromedriver")
 
-driver = webdriver.Chrome(service=service)
+
+@pytest.fixture(scope="session")
+def driver():
+    _driver = webdriver.Chrome(service=service)
+
+    return _driver
+
+
