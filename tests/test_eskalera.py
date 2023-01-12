@@ -12,7 +12,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-
+@pytest.mark
 class TestEskaleraPage:
     @pytest.fixture(scope='session')
     def navigate_to_login_page(self, driver):
