@@ -35,24 +35,25 @@ class TestEskaleraPage:
         continue_or_login_button.click()
 
         username_or_password_field_locator = 'input'
-        username_or_password_field = WebDriverWait(driver, 20, (NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException))\
-                                    .until(expected_conditions.presence_of_element_located((By.TAG_NAME, username_or_password_field_locator)))
+        username_or_password_field = WebDriverWait(driver, 20, (NoSuchElementException, StaleElementReferenceException,
+                                                                ElementNotInteractableException)) \
+            .until(expected_conditions.presence_of_element_located((By.TAG_NAME, username_or_password_field_locator)))
 
         logging.info('Entering password in the password field')
         username_or_password_field.send_keys("Abcd1234")
 
         continue_button_locator = 'MuiButton-label'
-        continue_or_login_button = WebDriverWait(driver, 10, (StaleElementReferenceException))\
-                                    .until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, continue_button_locator)))
+        continue_or_login_button = WebDriverWait(driver, 10, StaleElementReferenceException) \
+            .until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, continue_button_locator)))
 
         logging.info('Clicking "Continue" button')
         continue_or_login_button.click()
 
-        time.sleep(6)
+        time.sleep(3)
 
         top_right_menu_locator = "MuiSvgIcon-root"
-        top_right_menu = WebDriverWait(driver, 10, (TimeoutException))\
-                        .until(expected_conditions.visibility_of_all_elements_located((By.CLASS_NAME, top_right_menu_locator)))
+        top_right_menu = WebDriverWait(driver, 10, TimeoutException) \
+            .until(expected_conditions.visibility_of_all_elements_located((By.CLASS_NAME, top_right_menu_locator)))
 
         logging.info("Selecting icon to open menu")
         top_right_menu[1].click()
@@ -60,8 +61,8 @@ class TestEskaleraPage:
         time.sleep(4)
 
         drop_down_menu_locator = "//span[normalize-space()='Admin Platform']"
-        drop_down_menu = WebDriverWait(driver, 20)\
-                                     .until(expected_conditions.presence_of_element_located((By.XPATH, drop_down_menu_locator)))
+        drop_down_menu = WebDriverWait(driver, 20) \
+            .until(expected_conditions.presence_of_element_located((By.XPATH, drop_down_menu_locator)))
 
         logging.info("Selecting 'Admin Platform' from top-right drop down menu")
         drop_down_menu.click()
@@ -69,14 +70,16 @@ class TestEskaleraPage:
         time.sleep(3)
 
         employee_list_selection_locator = "//div[@aria-rowindex='5']//div[@aria-colindex='1']//div[contains(text(),'Stodd  Pierce')]"
-        employee_list_selection = WebDriverWait(driver, 20)\
-                                .until(expected_conditions.presence_of_element_located((By.XPATH, employee_list_selection_locator)))
+        employee_list_selection = WebDriverWait(driver, 20) \
+            .until(expected_conditions.presence_of_element_located((By.XPATH, employee_list_selection_locator)))
 
+        logging.info("Selecting 'Stodd Pierce' from employee list")
         employee_list_selection.click()
 
         time.sleep(3)
 
-        header_name = driver.find_element(By.CSS_SELECTOR, '.MuiTypography-root.MuiTypography-h3.MuiTypography-colorTextPrimary')
+        header_name = driver.find_element(By.CSS_SELECTOR,
+                                          '.MuiTypography-root.MuiTypography-h3.MuiTypography-colorTextPrimary')
 
         assert "Stodd Pierce" in header_name.text
 
@@ -88,19 +91,16 @@ class TestEskaleraPage:
 
         assert "Nov 27, 2022 6:00 PM" in last_invite.text
 
-        ActionChains(driver).scroll_to_element(driver.find_element(By.CSS_SELECTOR, "button[aria-label='Edit Personal Info']"))
+        logging.info("Scrolling to Groups section")
+        ActionChains(driver).scroll_to_element(
+            driver.find_element(By.CSS_SELECTOR, "button[aria-label='Edit Personal Info']"))
 
         time.sleep(5)
 
-        def compare(a, b):
-            return all(any(x in y for y in b) for x in a)
+        actual_group_memberships = driver.find_elements(By.CSS_SELECTOR,
+                                                        "div[aria-label*='Release backspace or delete key to remove.']")
 
-        group_memberships = driver.find_elements(By.CSS_SELECTOR, "div[aria-label*='Release backspace or delete key to remove.']")
+        expected_groups = ['All', 'Sales']
 
-        group_names = ['All', 'Sales']
-
-        groups = [group_memberships[0].text, group_memberships[1].text]
-
-        assert compare(group_names, groups)
-
-
+        assert expected_groups[0] == actual_group_memberships[0].text \
+               and expected_groups[1] == actual_group_memberships[1].text
