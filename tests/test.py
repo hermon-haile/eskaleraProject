@@ -29,14 +29,18 @@ class TestEskaleraPage:
         logging.info('Entering username in username field')
         username_or_password_field.send_keys("hermon.haile@gmail.com")
 
+        time.sleep(2)
+
         continue_or_login_button = driver.find_element(By.CLASS_NAME, "MuiButton-label")
 
         logging.info('Clicking "Continue" button')
         continue_or_login_button.click()
 
+        time.sleep(2)
+
         username_or_password_field_locator = 'input'
         username_or_password_field = WebDriverWait(driver, 20, (NoSuchElementException, StaleElementReferenceException,
-                                                                ElementNotInteractableException)) \
+                                                                ElementNotInteractableException))\
             .until(expected_conditions.presence_of_element_located((By.TAG_NAME, username_or_password_field_locator)))
 
         logging.info('Entering password in the password field')
@@ -81,12 +85,15 @@ class TestEskaleraPage:
         header_name = driver.find_element(By.CSS_SELECTOR,
                                           '.MuiTypography-root.MuiTypography-h3.MuiTypography-colorTextPrimary')
 
+        logging.info('Verifying Employee name is correct in Header')
         assert "Stodd Pierce" in header_name.text
 
         last_login = driver.find_element(By.XPATH, "//div[contains(text(),'Last login')]")
 
+        logging.info('Verifying Last login value')
         assert "-" in last_login.text
 
+        logging.info('Verifying Last invite value')
         last_invite = driver.find_element(By.XPATH, "//div[contains(text(),'Last invite')]")
 
         assert "Nov 27, 2022 6:00 PM" in last_invite.text
@@ -102,5 +109,8 @@ class TestEskaleraPage:
 
         expected_groups = ['All', 'Sales']
 
+        logging.info('Verifying Expected Groups is equal to Actual Groups')
         assert expected_groups[0] == actual_group_memberships[0].text \
                and expected_groups[1] == actual_group_memberships[1].text
+
+
