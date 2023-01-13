@@ -2,7 +2,9 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
-service = Service(executable_path="/Users/herm/Downloads/chromedriver")
+# Update path to location of downloaded chromedriver
+path = ''
+service = Service(executable_path=path)
 
 
 @pytest.fixture(scope="session")
