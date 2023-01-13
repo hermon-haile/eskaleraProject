@@ -12,7 +12,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-@pytest.mark
+
+@pytest.mark.takehome
 class TestEskaleraPage:
     @pytest.fixture(scope='session')
     def navigate_to_login_page(self, driver):
@@ -26,8 +27,11 @@ class TestEskaleraPage:
     def test_user_has_correct_header_information_and_employee_groups(self, navigate_to_login_page, driver):
         username_or_password_field = driver.find_element(By.TAG_NAME, "input")
 
+        # Update string with your test user locally
+        username = ''
+
         logging.info('Entering username in username field')
-        username_or_password_field.send_keys("hermon.haile@gmail.com")
+        username_or_password_field.send_keys(username)
 
         time.sleep(2)
 
@@ -43,8 +47,10 @@ class TestEskaleraPage:
                                                                 ElementNotInteractableException))\
             .until(expected_conditions.presence_of_element_located((By.TAG_NAME, username_or_password_field_locator)))
 
+        # Update string with test users password locally
+        password = ''
         logging.info('Entering password in the password field')
-        username_or_password_field.send_keys("Abcd1234")
+        username_or_password_field.send_keys(password)
 
         continue_button_locator = 'MuiButton-label'
         continue_or_login_button = WebDriverWait(driver, 10, StaleElementReferenceException) \
